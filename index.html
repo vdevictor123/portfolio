@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Víctor Toret — Data Analyst</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    /* === 1. RESET & VARIABLES === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:       #FAF7F2;
+      --cream-dark:  #EDE8DE;
+      --navy:        #1C3557;
+      --navy-light:  #2A4B78;
+      --coral:       #C8810A;
+      --coral-light: #E8AB30;
+      --text:        #2C2C2C;
+      --muted:       #6B6B6B;
+      --white:       #FFFFFF;
+      --ease:        0.3s ease;
+      --max:         1200px;
+      --pad:         100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* === 2. TYPOGRAPHY === */
+    h1, h2, h3 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+    h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 700; }
+    h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--navy); }
+    h3 { font-size: 1.25rem; font-weight: 700; }
+    p  { color: var(--muted); margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* === 3. LAYOUT === */
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+    .section    { padding: var(--pad) 0; }
+
+    .label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 12px;
+    }
+
+    /* === 4. SCROLL ANIMATIONS === */
+    .fade {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade.in  { opacity: 1; transform: translateY(0); }
+    .fade.d1  { transition-delay: 0.1s; }
+    .fade.d2  { transition-delay: 0.2s; }
+    .fade.d3  { transition-delay: 0.3s; }
+
+    /* === 5. PROGRESS BAR === */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--coral);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* === 6. NAVBAR === */
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      z-index: 100;
+      background: rgba(250,247,242,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(28,53,87,0.08);
+      padding: 18px 0;
+      transition: box-shadow var(--ease);
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(28,53,87,0.1); }
+
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .nav-logo span { color: var(--coral); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      transition: color var(--ease);
+    }
+    .nav-links a:hover { color: var(--coral); }
+
+    .lang-btn {
+      background: var(--navy);
+      color: white;
+      border: none;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background var(--ease);
+    }
+    .lang-btn:hover { background: var(--coral); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--navy); border-radius: 2px; }
+
+    /* === 7. HERO === */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::before {
+      content: '';
+      position: absolute; top: -10%; right: -6%;
+      width: 640px; height: 640px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,129,10,0.09) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; bottom: 0%; left: -8%;
+      width: 460px; height: 460px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(28,53,87,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 820px; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 36px; height: 2px;
+      background: var(--coral);
+    }
+
+    h1.hero-name { color: var(--navy); letter-spacing: -0.02em; margin-bottom: 18px; }
+    .hero-last {
+      display: block;
+      font-size: 0.6em;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--navy);
+      opacity: 0.65;
+      margin-top: 4px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 40px;
+      line-height: 1.85;
+    }
+
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 34px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      transition: transform var(--ease), background var(--ease), color var(--ease), border-color var(--ease);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-fill  { background: var(--coral); color: white; }
+    .btn-fill:hover { background: #a86a08; }
+    .btn-outline { border: 2px solid var(--navy); color: var(--navy); background: transparent; }
+    .btn-outline:hover { background: var(--navy); color: white; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted);
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      animation: nudge 2.5s ease-in-out infinite;
+    }
+    .scroll-hint svg { width: 18px; height: 18px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    @keyframes nudge {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(7px); }
+    }
+
+    /* === 8. ABOUT === */
+    #about { background: var(--cream); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text h2 { margin-bottom: 24px; }
+    .about-text p  { font-size: 1.04rem; }
+
+    .photo-wrap {
+      position: relative;
+      border-radius: 12px;
+    }
+    .photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 16px -16px -16px 16px;
+      border: 2px solid var(--coral);
+      border-radius: 12px;
+      z-index: 0;
+    }
+    .photo-wrap img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    /* About expandable */
+    .about-summary {
+      font-size: 1.04rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+    }
+
+    .about-expandable {
+      margin-top: 0.25rem;
+    }
+
+    .about-toggle {
+      background: none;
+      border: none;
+      padding: 0.4rem 0;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s ease, gap 0.2s ease;
+    }
+    .about-toggle:hover {
+      opacity: 0.75;
+      gap: 0.75rem;
+    }
+
+    .toggle-icon {
+      display: inline-block;
+      transition: transform 0.4s ease;
+      font-size: 0.75rem;
+    }
+    .about-toggle[aria-expanded="true"] .toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    .about-full-story {
+      margin-top: 1.5rem;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+    .about-full-story.open {
+      max-height: 3000px;
+      opacity: 1;
+    }
+
+    .about-full-story h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .about-full-story h3:first-child {
+      margin-top: 0;
+    }
+    .about-full-story p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* === Languages inline === */
+    .lang-list-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .lang-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .lang-item strong { color: var(--navy); font-weight: 700; }
+    .lang-item span   { color: var(--muted); }
+
+    /* === Certifications expandable === */
+    .cert-list { display: flex; flex-direction: column; }
+
+    .certification-item {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(28, 53, 87, 0.08);
+    }
+    .certification-item:first-child { padding-top: 0; }
+    .certification-item:last-child  { border-bottom: none; padding-bottom: 0; }
+
+    .cert-title {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 0.2rem 0;
+      line-height: 1.4;
+    }
+
+    .cert-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0 0 0.6rem 0;
+    }
+
+    .cert-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: opacity 0.2s ease, gap 0.2s ease;
+    }
+    .cert-toggle:hover { opacity: 0.75; gap: 0.6rem; }
+    .cert-toggle[aria-expanded="true"] .toggle-icon { transform: rotate(180deg); }
+
+    .cert-details {
+      margin-top: 0.75rem;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+    .cert-details.open { max-height: 600px; opacity: 1; }
+
+    .cert-details p {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .cert-details p:last-child { margin-bottom: 0; }
+
+    /* === 9. SKILLS === */
+    #skills { background: var(--cream-dark); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-top: 48px;
+    }
+
+    .skills-col > h3 {
+      color: var(--navy);
+      font-size: 1.1rem;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--coral);
+      margin-bottom: 28px;
+      display: inline-block;
+    }
+
+    .skill-group { margin-bottom: 24px; }
+    .skill-group-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill {
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .p-navy   { background: rgba(28,53,87,0.1);    color: var(--navy); }
+    .p-coral  { background: rgba(200,129,10,0.12);  color: #8a5a06; }
+    .p-teal   { background: rgba(42,138,138,0.12); color: #1a6b6b; }
+    .p-amber  { background: rgba(215,150,0,0.13);  color: #7a5200; }
+    .p-slate  { background: rgba(100,116,139,0.12);color: #445566; }
+
+    .lang-list { display: flex; flex-direction: column; gap: 8px; }
+    .lang-row  { font-size: 0.9rem; color: var(--text); }
+    .lang-row strong { color: var(--navy); }
+
+    .cert-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .cert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--white);
+      border-radius: 8px;
+      border-left: 3px solid var(--coral);
+    }
+    .cert-icon {
+      flex-shrink: 0;
+      width: 34px; height: 34px;
+      background: rgba(224,113,82,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cert-icon svg { width: 15px; height: 15px; stroke: var(--coral); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .cert-name   { font-size: 0.88rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+    .cert-issuer { font-size: 0.78rem; color: var(--muted); }
+
+    /* === 10. PROJECTS === */
+    #projects { background: var(--cream); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      margin-top: 48px;
+    }
+
+    .project-card {
+      background: var(--white);
+      border: 1px solid rgba(28,53,87,0.08);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 48px rgba(28,53,87,0.13);
+    }
+
+    .project-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: rgba(224,113,82,0.2);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .project-card h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: 10px; line-height: 1.4; }
+    .project-card > p { font-size: 0.88rem; flex-grow: 1; margin-bottom: 18px; }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .project-tag {
+      font-size: 0.73rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--cream-dark);
+      color: var(--navy);
+    }
+
+    .project-story {
+      font-size: 0.84rem;
+      font-style: italic;
+      color: var(--muted);
+      border-left: 2px solid var(--coral);
+      padding-left: 12px;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--coral);
+      margin-top: auto;
+      transition: gap var(--ease);
+    }
+    .project-link:hover { gap: 12px; }
+    .project-link svg { width: 16px; height: 16px; stroke: var(--coral); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* === 11. MY WORLD === */
+    #world { background: var(--navy); padding: var(--pad) 0; }
+    #world h2   { color: var(--white); }
+    #world .label { color: var(--coral-light); }
+
+    .world-header { margin-bottom: 44px; }
+    .world-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.85fr 1fr;
+      gap: 20px;
+    }
+
+    .world-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .world-card:nth-child(2) { margin-top: 44px; }
+
+    .world-card img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      display: block;
+    }
+    .world-card:hover img { transform: scale(1.05); }
+
+    .world-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 36px 24px 24px;
+      background: linear-gradient(transparent, rgba(18,36,58,0.94));
+      color: var(--white);
+    }
+    .world-card-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral-light);
+      margin-bottom: 6px;
+    }
+    .world-card-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--white);
+      margin: 0;
+    }
+
+    /* === 12. CONTACT === */
+    #contact { background: var(--cream); text-align: center; }
+
+    .contact-intro {
+      max-width: 540px;
+      margin: 0 auto 44px;
+      font-size: 1.04rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 22px;
+      border-radius: 8px;
+      border: 2px solid rgba(28,53,87,0.18);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--navy);
+      transition: border-color var(--ease), color var(--ease), transform var(--ease), background var(--ease);
+    }
+    .contact-link:hover { border-color: var(--coral); color: var(--coral); transform: translateY(-2px); }
+    .contact-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .contact-link.primary { background: var(--coral); border-color: var(--coral); color: white; }
+    .contact-link.primary:hover { background: #a86a08; border-color: #a86a08; color: white; }
+
+    /* === 13. FOOTER === */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 24px;
+      font-size: 0.82rem;
+    }
+    footer em { color: var(--coral-light); font-style: normal; }
+
+    /* === 14. RESPONSIVE === */
+    @media (max-width: 1024px) {
+      .about-grid       { grid-template-columns: 1fr 300px; gap: 52px; }
+      .projects-grid    { grid-template-columns: 1fr 1fr; }
+      .projects-grid .project-card:last-child { grid-column: 1 / -1; max-width: 420px; }
+      .world-grid       { grid-template-columns: 1fr 1fr; }
+      .world-card:nth-child(3) { grid-column: 1 / -1; }
+      .world-card:nth-child(3) img { height: 280px; }
+    }
+
+    @media (max-width: 768px) {
+      :root { --pad: 70px; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: var(--cream);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 28px;
+        border-bottom: 1px solid rgba(28,53,87,0.1);
+        gap: 20px;
+      }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .about-grid     { grid-template-columns: 1fr; }
+      .photo-wrap     { max-width: 280px; margin: 0 auto; }
+      .skills-grid    { grid-template-columns: 1fr; gap: 44px; }
+      .projects-grid  { grid-template-columns: 1fr; }
+      .projects-grid .project-card:last-child { max-width: none; }
+      .world-grid     { grid-template-columns: 1fr; }
+      .world-card:nth-child(2) { margin-top: 0; }
+      .world-card:nth-child(3) { grid-column: auto; }
+      .world-card img { height: 280px; }
+      .hero-ctas      { flex-direction: column; max-width: 260px; }
+    }
+
+    @media (max-width: 480px) {
+      .contact-link { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div id="progress"></div>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <nav id="navbar">
+    <div class="container">
+      <a class="nav-logo" href="#hero">Víctor<span>.</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about"    data-i18n="nav_about">About</a></li>
+        <li><a href="#skills"   data-i18n="nav_skills">Skills</a></li>
+        <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+        <li><a href="#world"    data-i18n="nav_world">My World</a></li>
+        <li><a href="#contact"  data-i18n="nav_contact">Contact</a></li>
+        <li><button class="lang-btn" id="langBtn" onclick="toggleLang()">ES</button></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner fade">
+        <div class="hero-eyebrow" data-i18n="hero_eyebrow">Data Analyst</div>
+        <h1 class="hero-name">Víctor<span class="hero-last">Toret</span></h1>
+        <p class="hero-tagline" data-i18n="hero_tagline">
+          I turn raw data into stories worth telling — SQL, Python, Power BI.
+        </p>
+        <div class="hero-ctas">
+          <a href="#projects" class="btn btn-fill"    data-i18n="hero_cta1">View projects</a>
+          <a href="#contact"  class="btn btn-outline" data-i18n="hero_cta2">Get in touch</a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-text fade">
+          <div class="label" data-i18n="about_label">About me</div>
+          <h2 data-i18n="about_h">The analyst behind the data</h2>
+
+          <p class="about-summary" data-i18n="about_summary">
+            I'm 36, a data analyst with a backpack full of miles and the conviction that
+            data always has something to tell. I studied Sports Science in Barcelona, worked
+            for years as a personal trainer, and lived in Spain, Colombia, Chicago, Mexico,
+            and spent five months in the Philippines. Each place taught me that behind every
+            business decision—from training loads to restaurant flows to tourism metrics—there
+            are numbers that speak clearly if you know how to listen.
+          </p>
+
+          <div class="about-expandable">
+            <button class="about-toggle" aria-expanded="false" aria-controls="about-full-story">
+              <span class="toggle-text" data-i18n="about_toggle">Read my full story</span>
+              <span class="toggle-icon">▼</span>
+            </button>
+
+            <div class="about-full-story" id="about-full-story" style="display:none;">
+              <h3 data-i18n="about_sh1">From sports data to data everywhere</h3>
+              <p data-i18n="about_sp1">Everything started in Barcelona, where I studied Sports Science and Physical Activity. That's where I realized something that would shape my entire career: data speaks, you just have to know how to listen. Times, loads, results—everything was information. I worked for years as a personal trainer and as the right hand of a gym owner, learning that behind every decision there were—or should have been—numbers backing it up.</p>
+
+              <h3 data-i18n="about_sh2">The pandemic, Menorca, and an unexpected turn</h3>
+              <p data-i18n="about_sp2">After the pandemic, like so many others, I felt the call to go home. I returned to Menorca with a clear plan: build my own gym, more specialized, focused on data-driven training and scientific evidence. But life, which has its own algorithm, had other plans. I met someone who shared my way of seeing the world. I fell in love. And when she told me she had a job opportunity in Chicago and asked if I wanted to go with her... I thought about it twice. The third time, I packed my bag.</p>
+
+              <h3 data-i18n="about_sh3">Colombia, Chicago, and Mexico: learning by doing</h3>
+              <p data-i18n="about_sp3">Before crossing the Atlantic, I spent more than three months in Colombia. What was supposed to be one season in Chicago turned into three. There, I got a job at a restaurant where I could see something fascinating up close: the complete flow of a business. Administration, accounting, coordination, costs... And there the data was again, guiding every important decision. From Chicago I traveled to Mexico, continuing to learn, adapt, and absorb new cultures.</p>
+
+              <h3 data-i18n="about_sh4">The return and the best investment of my life</h3>
+              <p data-i18n="about_sp4">Family circumstances brought me back to Spain. I focused almost entirely on my family, and after four years, my relationship came to an end. I found myself at a starting point: unemployed, reinventing myself in almost every aspect. That's when I made the clearest decision of my life: invest in myself. I'd always had a special relationship with data—in my discussions I always said "look at the data, it tells you everything"—so I embarked on the Data Analytics Bootcamp at Immune Technology Institute in Madrid. It was hard, intense, and enormously satisfying.</p>
+
+              <h3 data-i18n="about_sh5">Philippines: where my first major project was born</h3>
+              <p data-i18n="about_sp5">After finishing the bootcamp, with family life stabilized, I went on a trip with my best friend. Destination: the Philippines. Two months diving and traveling the country... and a curiosity I couldn't ignore. How is tourism counted here? Where would a business be most profitable? What kind of traveler arrives and what do they seek? I knew data could answer those questions. That's how my Philippines Tourism Analysis project was born. I started working on it while still traveling. When my friend left, I stayed. Five months in total, living with local people, learning their philosophy of life and way of seeing the world.</p>
+
+              <h3 data-i18n="about_sh6">Today: on the move again, without losing focus</h3>
+              <p data-i18n="about_sp6">Other family circumstances brought me back to Spain. Starting over no longer scares me: I've done it several times and know there's always something valuable on the other side. I keep studying, keep improving every day, and keep adapting to a world that doesn't stop. Because if these years and all these miles have taught me anything, it's that new beginnings aren't the end of something. They're exactly where the best part starts.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="photo-wrap fade d2">
+          <img src="images/profile.png" alt="Victor Toret — Data Analyst">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section id="skills" class="section">
+    <div class="container">
+      <div class="fade">
+        <div class="label" data-i18n="skills_label">What I work with</div>
+        <h2 data-i18n="skills_h">Skills &amp; Certifications</h2>
+      </div>
+      <div class="skills-grid">
+
+        <div class="fade d1">
+          <h3 data-i18n="stack_h">Technical Stack</h3>
+
+          <div class="skill-group">
+            <div class="skill-group-label" data-i18n="cat_lang">Languages &amp; Databases</div>
+            <div class="pills">
+              <span class="pill p-navy">Python</span>
+              <span class="pill p-navy">SQL</span>
+              <span class="pill p-navy">MySQL</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <div class="skill-group-label" data-i18n="cat_analytics">Analytics &amp; Visualisation</div>
+            <div class="pills">
+              <span class="pill p-teal">pandas</span>
+              <span class="pill p-teal">NumPy</span>
+              <span class="pill p-teal">Scikit-learn</span>
+              <span class="pill p-teal">XGBoost</span>
+              <span class="pill p-teal">Power BI</span>
+              <span class="pill p-teal">Azure Maps</span>
+              <span class="pill p-teal">Excel</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <div class="skill-group-label" data-i18n="cat_tools">Tools &amp; Other</div>
+            <div class="pills">
+              <span class="pill p-slate">Git / GitHub</span>
+              <span class="pill p-slate">Ollama (LLM)</span>
+              <span class="pill p-slate">GDPR / Privacy</span>
+              <span class="pill p-slate">tabula-py</span>
+              <span class="pill p-slate">Faker</span>
+            </div>
+          </div>
+
+          <div class="skill-group">
+            <div class="skill-group-label" data-i18n="cat_languages">Languages</div>
+            <div class="lang-list-inline">
+              <span class="lang-item"><strong data-i18n="l_es">Spanish</strong> — <span data-i18n="l_native">Native</span></span>
+              <span class="lang-item"><strong data-i18n="l_ca">Catalan</strong> — <span data-i18n="l_native2">Native</span></span>
+              <span class="lang-item"><strong data-i18n="l_en">English</strong> — <span data-i18n="l_fluent">Fluent</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fade d2">
+          <h3 data-i18n="certs_h">Certifications</h3>
+          <div class="cert-list">
+
+            <div class="certification-item">
+              <div class="cert-header">
+                <p class="cert-title" data-i18n="cert1">Data Analytics Bootcamp</p>
+                <p class="cert-meta">Immune Technology Institute · 2025</p>
+              </div>
+              <button class="cert-toggle" aria-expanded="false" aria-controls="cert-details-1">
+                <span class="toggle-text" data-i18n="cert_toggle">See details</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="cert-details" id="cert-details-1" style="display:none;">
+                <p data-i18n="cert1_p1">Intensive 300-hour program focused on data analysis from scratch with a practical, project-based methodology. I acquired skills in Python, SQL, data modeling and transformation, exploratory data analysis (EDA), and visualization with tools like Power BI.</p>
+                <p data-i18n="cert1_p2">I worked with Machine Learning fundamentals and AI applied to decision-making, developing a final capstone project oriented to solving a real case. The learning-by-doing approach allowed me to understand how to transform data into useful business information.</p>
+              </div>
+            </div>
+
+            <div class="certification-item">
+              <div class="cert-header">
+                <p class="cert-title" data-i18n="cert2">SQL for Data Science</p>
+                <p class="cert-meta">UC Davis · Coursera</p>
+              </div>
+              <button class="cert-toggle" aria-expanded="false" aria-controls="cert-details-2">
+                <span class="toggle-text" data-i18n="cert_toggle">See details</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="cert-details" id="cert-details-2" style="display:none;">
+                <p data-i18n="cert2_p1">Introductory course focused on using SQL for data analysis. I developed skills to query, filter, transform, and combine information in relational databases, building queries from basic to intermediate level using JOINs, aggregations, and subqueries.</p>
+                <p data-i18n="cert2_p2">Practical approach oriented to understanding how to extract insights and support decision-making from real data.</p>
+              </div>
+            </div>
+
+            <div class="certification-item">
+              <div class="cert-header">
+                <p class="cert-title" data-i18n="cert3">Excel for Data Analysis</p>
+                <p class="cert-meta">IBM · Coursera</p>
+              </div>
+              <button class="cert-toggle" aria-expanded="false" aria-controls="cert-details-3">
+                <span class="toggle-text" data-i18n="cert_toggle">See details</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="cert-details" id="cert-details-3" style="display:none;">
+                <p data-i18n="cert3_p1">Course focused on using Excel as a data analysis tool. I developed skills to clean, organize, and analyze information efficiently, working with advanced functions, pivot tables, and visualization tools to extract insights and facilitate decision-making.</p>
+                <p data-i18n="cert3_p2">Learned best practices in data preparation and automation of basic tasks.</p>
+              </div>
+            </div>
+
+            <div class="certification-item">
+              <div class="cert-header">
+                <p class="cert-title" data-i18n="cert4">Project Management Foundations</p>
+                <p class="cert-meta">Google · Coursera</p>
+              </div>
+              <button class="cert-toggle" aria-expanded="false" aria-controls="cert-details-4">
+                <span class="toggle-text" data-i18n="cert_toggle">See details</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="cert-details" id="cert-details-4" style="display:none;">
+                <p data-i18n="cert4_p1">Course focused on project management fundamentals, where I acquired knowledge on planning, organization, and monitoring projects in professional environments. I learned methodologies like Agile and Waterfall, time management, objective definition, and team coordination.</p>
+                <p data-i18n="cert4_p2">Understanding of tools and best practices to ensure efficient and on-time project delivery.</p>
+              </div>
+            </div>
+
+            <div class="certification-item">
+              <div class="cert-header">
+                <p class="cert-title" data-i18n="cert5">Data Science &amp; AI Fundamentals</p>
+                <p class="cert-meta">Immune Technology Institute</p>
+              </div>
+              <button class="cert-toggle" aria-expanded="false" aria-controls="cert-details-5">
+                <span class="toggle-text" data-i18n="cert_toggle">See details</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="cert-details" id="cert-details-5" style="display:none;">
+                <p data-i18n="cert5_p1">Course oriented to data science and AI fundamentals, where I acquired a solid foundation in key concepts like data analysis, statistics, machine learning, and the role of AI in real environments.</p>
+                <p data-i18n="cert5_p2">Practical and applied approach that allowed me to connect these concepts with real business cases and understand how data transforms into useful information for decision-making.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section id="projects" class="section">
+    <div class="container">
+      <div class="fade">
+        <div class="label" data-i18n="proj_label">Portfolio</div>
+        <h2 data-i18n="proj_h">Featured Projects</h2>
+      </div>
+      <div class="projects-grid">
+
+        <div class="project-card fade d1">
+          <div class="project-num">01</div>
+          <h3 data-i18n="p1_title">Philippines Tourism Analysis</h3>
+          <p data-i18n="p1_desc">End-to-end ETL pipeline on official Philippine tourism data (2015–2023). Automated extraction from annual PDF reports, multi-source cleaning with Python, and Power BI dashboard with Azure Maps.</p>
+          <div class="project-tags">
+            <span class="project-tag">SQL</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Power BI</span>
+            <span class="project-tag">Azure Maps</span>
+            <span class="project-tag">pandas</span>
+            <span class="project-tag">tabula-py</span>
+          </div>
+          <p class="project-story" data-i18n="p1_story">"Born during a 5-month stay in the Philippines. The data told a story I was living."</p>
+          <a href="https://github.com/vdevictor123/End-to-End-Tourism-Data-Analysis-in-the-Philippines-Arrivals-Regions-" target="_blank" rel="noopener" class="project-link">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span data-i18n="gh_link">View on GitHub</span> →
+          </a>
+        </div>
+
+        <div class="project-card fade d2">
+          <div class="project-num">02</div>
+          <h3 data-i18n="p2_title">NovaShop — Privacy Pipeline</h3>
+          <p data-i18n="p2_desc">GDPR-compliant data pipeline for a fictional e-commerce. Synthetic data generation with Faker, unstructured PII detection using Ollama (llama3.2), and anonymisation techniques: SHA2 hashing, masking, noise injection, k-anonymity.</p>
+          <div class="project-tags">
+            <span class="project-tag">MySQL</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Ollama</span>
+            <span class="project-tag">GDPR</span>
+            <span class="project-tag">Faker</span>
+          </div>
+          <p class="project-story" data-i18n="p2_story">"Started as curiosity about anonymising data before sending it to AI. Became a full privacy engineering project."</p>
+          <a href="https://github.com/vdevictor123?tab=repositories" target="_blank" rel="noopener" class="project-link">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span data-i18n="gh_link2">View on GitHub</span> →
+          </a>
+        </div>
+
+        <div class="project-card fade d3">
+          <div class="project-num">03</div>
+          <h3 data-i18n="p3_title">JoyClinic — Sales Forecasting</h3>
+          <p data-i18n="p3_desc">Sales forecasting model for a real healthcare clinic using XGBoost. Multi-source merge: bookings, weather, local events, public holidays. Progression: Linear Reg. (R²=0.61) → XGBoost (R²=0.74) → Enriched XGBoost (R²=0.79).</p>
+          <div class="project-tags">
+            <span class="project-tag">XGBoost</span>
+            <span class="project-tag">scikit-learn</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Power BI</span>
+            <span class="project-tag">pandas</span>
+          </div>
+          <p class="project-story" data-i18n="p3_story">"My first project with real data. Models improve when you understand the business, not just the algorithms."</p>
+          <a href="https://github.com/vdevictor123/joyclinic-analysis" target="_blank" rel="noopener" class="project-link">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span data-i18n="gh_link3">View on GitHub</span> →
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MY WORLD ===================== -->
+  <section id="world" class="section">
+    <div class="container">
+      <div class="world-header fade">
+        <div class="label" data-i18n="world_label">Beyond the screen</div>
+        <h2 data-i18n="world_h">My World</h2>
+      </div>
+      <div class="world-grid">
+
+        <div class="world-card fade d1">
+          <img src="images/travel1.jpg" alt="Philippines 2025">
+          <div class="world-overlay">
+            <div class="world-card-label" data-i18n="w1_label">Philippines · 2025</div>
+            <p class="world-card-text" data-i18n="w1_text">"Data has more stories when you've lived them."</p>
+          </div>
+        </div>
+
+        <div class="world-card fade d2">
+          <img src="images/travel2.jpg" alt="Travels">
+          <div class="world-overlay">
+            <div class="world-card-label" data-i18n="w2_label">Chicago · Mexico · Colombia</div>
+            <p class="world-card-text" data-i18n="w2_text">"Every city taught me to adapt. Every dataset does the same."</p>
+          </div>
+        </div>
+
+        <div class="world-card fade d3">
+          <img src="images/travel3.jpg" alt="Always moving">
+          <div class="world-overlay">
+            <div class="world-card-label" data-i18n="w3_label">Always moving</div>
+            <p class="world-card-text" data-i18n="w3_text">"From sport science to data science — the metrics never lie."</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="fade">
+        <div class="label" data-i18n="contact_label">Let's talk</div>
+        <h2 data-i18n="contact_h">Get in touch</h2>
+      </div>
+      <p class="contact-intro fade d1" data-i18n="contact_intro">
+        If you think we'd be a good fit — drop me a line.
+      </p>
+      <div class="contact-links fade d2">
+
+        <a href="mailto:vtoretmarin@gmail.com" class="contact-link primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          vtoretmarin@gmail.com
+        </a>
+
+        <a href="https://www.linkedin.com/in/victor-toret-marin-458674321" target="_blank" rel="noopener" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+          LinkedIn
+        </a>
+
+        <a href="https://github.com/vdevictor123?tab=repositories" target="_blank" rel="noopener" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+          GitHub
+        </a>
+
+        <a href="tel:+34686800297" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.9a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          +34 686 800 297
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <p>© 2026 Victor Toret Marin &nbsp;·&nbsp; Built with <em>♥</em> and data</p>
+  </footer>
+
+  <script>
+    /* ===== TRANSLATIONS ===== */
+    const T = {
+      en: {
+        nav_about:'About', nav_skills:'Skills', nav_projects:'Projects',
+        nav_world:'My World', nav_contact:'Contact',
+        hero_eyebrow:'Data Analyst',
+        hero_tagline:"I turn raw data into stories worth telling — SQL, Python, Power BI.",
+        hero_cta1:'View projects', hero_cta2:'Get in touch',
+        about_label:'About me', about_h:'The analyst behind the data',
+        about_summary:"I'm 36, a data analyst with a backpack full of miles and the conviction that data always has something to tell. I studied Sports Science in Barcelona, worked for years as a personal trainer, and lived in Spain, Colombia, Chicago, Mexico, and spent five months in the Philippines. Each place taught me that behind every business decision—from training loads to restaurant flows to tourism metrics—there are numbers that speak clearly if you know how to listen.",
+        about_toggle:'Read my full story',
+        about_sh1:'From sports data to data everywhere',
+        about_sh2:'The pandemic, Menorca, and an unexpected turn',
+        about_sh3:'Colombia, Chicago, and Mexico: learning by doing',
+        about_sh4:'The return and the best investment of my life',
+        about_sh5:'Philippines: where my first major project was born',
+        about_sh6:'Today: on the move again, without losing focus',
+        about_sp1:"Everything started in Barcelona, where I studied Sports Science and Physical Activity. That's where I realized something that would shape my entire career: data speaks, you just have to know how to listen. Times, loads, results—everything was information. I worked for years as a personal trainer and as the right hand of a gym owner, learning that behind every decision there were—or should have been—numbers backing it up.",
+        about_sp2:"After the pandemic, like so many others, I felt the call to go home. I returned to Menorca with a clear plan: build my own gym, more specialized, focused on data-driven training and scientific evidence. But life, which has its own algorithm, had other plans. I met someone who shared my way of seeing the world. I fell in love. And when she told me she had a job opportunity in Chicago and asked if I wanted to go with her... I thought about it twice. The third time, I packed my bag.",
+        about_sp3:"Before crossing the Atlantic, I spent more than three months in Colombia. What was supposed to be one season in Chicago turned into three. There, I got a job at a restaurant where I could see something fascinating up close: the complete flow of a business. Administration, accounting, coordination, costs... And there the data was again, guiding every important decision. From Chicago I traveled to Mexico, continuing to learn, adapt, and absorb new cultures.",
+        about_sp4:'Family circumstances brought me back to Spain. I focused almost entirely on my family, and after four years, my relationship came to an end. I found myself at a starting point: unemployed, reinventing myself in almost every aspect. That\'s when I made the clearest decision of my life: invest in myself. I\'d always had a special relationship with data—in my discussions I always said "look at the data, it tells you everything"—so I embarked on the Data Analytics Bootcamp at Immune Technology Institute in Madrid. It was hard, intense, and enormously satisfying.',
+        about_sp5:"After finishing the bootcamp, with family life stabilized, I went on a trip with my best friend. Destination: the Philippines. Two months diving and traveling the country... and a curiosity I couldn't ignore. How is tourism counted here? Where would a business be most profitable? What kind of traveler arrives and what do they seek? I knew data could answer those questions. That's how my Philippines Tourism Analysis project was born. I started working on it while still traveling. When my friend left, I stayed. Five months in total, living with local people, learning their philosophy of life and way of seeing the world.",
+        about_sp6:"Other family circumstances brought me back to Spain. Starting over no longer scares me: I've done it several times and know there's always something valuable on the other side. I keep studying, keep improving every day, and keep adapting to a world that doesn't stop. Because if these years and all these miles have taught me anything, it's that new beginnings aren't the end of something. They're exactly where the best part starts.",
+        skills_label:'What I work with', skills_h:'Skills &amp; Certifications',
+        stack_h:'Technical Stack',
+        cat_lang:'Languages &amp; Databases', cat_analytics:'Analytics &amp; Visualisation',
+        cat_tools:'Tools &amp; Other', cat_languages:'Languages',
+        l_es:'Spanish', l_ca:'Catalan', l_en:'English',
+        l_native:'Native', l_native2:'Native', l_fluent:'Fluent',
+        certs_h:'Certifications',
+        cert1:'Data Analytics Bootcamp', cert2:'SQL for Data Science',
+        cert3:'Excel for Data Analysis', cert4:'Project Management Foundations',
+        cert5:'Data Science &amp; AI Fundamentals',
+        cert_toggle:'See details',
+        cert1_p1:'Intensive 300-hour program focused on data analysis from scratch with a practical, project-based methodology. I acquired skills in Python, SQL, data modeling and transformation, exploratory data analysis (EDA), and visualization with tools like Power BI.',
+        cert1_p2:'I worked with Machine Learning fundamentals and AI applied to decision-making, developing a final capstone project oriented to solving a real case. The learning-by-doing approach allowed me to understand how to transform data into useful business information.',
+        cert2_p1:'Introductory course focused on using SQL for data analysis. I developed skills to query, filter, transform, and combine information in relational databases, building queries from basic to intermediate level using JOINs, aggregations, and subqueries.',
+        cert2_p2:'Practical approach oriented to understanding how to extract insights and support decision-making from real data.',
+        cert3_p1:'Course focused on using Excel as a data analysis tool. I developed skills to clean, organize, and analyze information efficiently, working with advanced functions, pivot tables, and visualization tools to extract insights and facilitate decision-making.',
+        cert3_p2:'Learned best practices in data preparation and automation of basic tasks.',
+        cert4_p1:'Course focused on project management fundamentals, where I acquired knowledge on planning, organization, and monitoring projects in professional environments. I learned methodologies like Agile and Waterfall, time management, objective definition, and team coordination.',
+        cert4_p2:'Understanding of tools and best practices to ensure efficient and on-time project delivery.',
+        cert5_p1:'Course oriented to data science and AI fundamentals, where I acquired a solid foundation in key concepts like data analysis, statistics, machine learning, and the role of AI in real environments.',
+        cert5_p2:'Practical and applied approach that allowed me to connect these concepts with real business cases and understand how data transforms into useful information for decision-making.',
+        proj_label:'Portfolio', proj_h:'Featured Projects',
+        p1_title:'Philippines Tourism Analysis',
+        p1_desc:'End-to-end ETL pipeline on official Philippine tourism data (2015–2023). Automated extraction from annual PDF reports, multi-source cleaning with Python, and Power BI dashboard with Azure Maps.',
+        p1_story:'"Born during a 5-month stay in the Philippines. The data told a story I was living."',
+        p2_title:'NovaShop — Privacy Pipeline',
+        p2_desc:'GDPR-compliant data pipeline for a fictional e-commerce. Synthetic data generation with Faker, unstructured PII detection using Ollama (llama3.2), and anonymisation: SHA2 hashing, masking, noise injection, k-anonymity.',
+        p2_story:'"Started as curiosity about anonymising data before sending it to AI. Became a full privacy engineering project."',
+        p3_title:'JoyClinic — Sales Forecasting',
+        p3_desc:'Sales forecasting model for a real healthcare clinic using XGBoost. Multi-source merge: bookings, weather, local events, public holidays. Progression: Linear Reg. (R²=0.61) → XGBoost (R²=0.74) → Enriched XGBoost (R²=0.79).',
+        p3_story:'"My first project with real data. Models improve when you understand the business, not just the algorithms."',
+        gh_link:'View on GitHub', gh_link2:'View on GitHub', gh_link3:'View on GitHub',
+        world_label:'Beyond the screen', world_h:'My World',
+        w1_label:'Philippines · 2025', w1_text:'"Data has more stories when you\'ve lived them."',
+        w2_label:'Chicago · Mexico · Colombia', w2_text:'"Every city taught me to adapt. Every dataset does the same."',
+        w3_label:'Always moving', w3_text:'"From sport science to data science — the metrics never lie."',
+        contact_label:"Let's talk", contact_h:'Get in touch',
+        contact_intro:"If you think we'd be a good fit — drop me a line.",
+      },
+      es: {
+        nav_about:'Sobre mí', nav_skills:'Habilidades', nav_projects:'Proyectos',
+        nav_world:'Mi Mundo', nav_contact:'Contacto',
+        hero_eyebrow:'Analista de Datos',
+        hero_tagline:'Convierto datos en bruto en historias que merecen contarse — SQL, Python, Power BI.',
+        hero_cta1:'Ver proyectos', hero_cta2:'Escríbeme',
+        about_label:'Sobre mí', about_h:'El analista detrás de los datos',
+        about_summary:"Tengo 36 años, soy analista de datos con una mochila llena de kilómetros y la convicción de que los datos siempre tienen algo que contar. Estudié Ciencias del Deporte en Barcelona, trabajé años como entrenador personal y viví en España, Colombia, Chicago, México y cinco meses en Filipinas. Cada lugar me enseñó que detrás de cada decisión de negocio —desde cargas de entrenamiento hasta flujos de restaurante o métricas de turismo— hay números que hablan claro si sabes escucharlos.",
+        about_toggle:'Leer mi historia completa',
+        about_sh1:'Del deporte a los datos: la misma lógica',
+        about_sh2:'La pandemia, Menorca y un giro inesperado',
+        about_sh3:'Colombia, Chicago y México: aprender haciendo',
+        about_sh4:'El regreso y la mejor inversión de mi vida',
+        about_sh5:'Filipinas: donde nació mi primer gran proyecto',
+        about_sh6:'Hoy: en movimiento, sin perder el norte',
+        about_sp1:'Todo empezó en Barcelona, donde estudié Ciencias de la Actividad Física y del Deporte. Ahí me di cuenta de algo que marcaría toda mi carrera: los datos hablan, solo hay que saber escucharlos. Tiempos, cargas, resultados: todo era información. Trabajé años como entrenador personal y como mano derecha de un gerente de gimnasio, aprendiendo que detrás de cada decisión había —o debería haber— números que la respaldaran.',
+        about_sp2:'Tras la pandemia, como tantos otros, sentí la llamada de casa. Volví a Menorca con un plan claro: montar mi propio gimnasio, más especializado, centrado en el entrenamiento basado en datos y evidencia científica. Pero la vida, que tiene su propio algoritmo, tenía otros planes. Conocí a alguien que compartía mi manera de ver el mundo. Me enamoré. Y cuando me dijo que tenía una oportunidad laboral en Chicago y me preguntó si quería ir con ella... lo pensé dos veces. A la tercera, hice la maleta.',
+        about_sp3:'Antes de cruzar el Atlántico, pasé más de tres meses en Colombia. Lo que iba a ser una temporada en Chicago se convirtieron en tres. Allí conseguí trabajo en un restaurante donde pude ver algo fascinante de cerca: el flujo completo de un negocio. Administración, contabilidad, coordinación, costes... Y ahí estaban de nuevo los datos, guiando cada decisión importante. Desde Chicago viajé a México, siguiendo aprendiendo, adaptándome y absorbiendo nuevas culturas.',
+        about_sp4:'Circunstancias familiares me trajeron de vuelta a España. Me dediqué casi en exclusiva a mi familia y, tras cuatro años, mi relación llegó a su fin. Me encontré en un punto de partida: sin trabajo, reinventándome en casi todos los aspectos. Fue entonces cuando tomé la decisión más clara de mi vida: invertir en mí mismo. Siempre había tenido una relación especial con los datos —en mis discusiones siempre decía "mira los datos, te lo dicen todo"— así que me embarqué en el Bootcamp de Data Analytics en Immune Technology Institute en Madrid. Fue duro, intenso y enormemente satisfactorio.',
+        about_sp5:'Tras acabar el bootcamp, con la vida familiar estabilizada, me fui de viaje con mi mejor amigo. Destino: Filipinas. Dos meses buceando y recorriendo el país... y una curiosidad que no podía ignorar. ¿Cómo se contabiliza el turismo aquí? ¿Dónde sería más rentable un negocio? ¿Qué tipo de viajero llega y qué busca? Sabía que los datos podían responder esas preguntas. Así nació mi proyecto de Análisis del Turismo en Filipinas. Empecé a trabajar en él mientras aún viajaba. Cuando mi amigo se fue, yo me quedé. Cinco meses en total, conviviendo con gente local, aprendiendo su filosofía de vida y su manera de ver el mundo.',
+        about_sp6:'Otras circunstancias familiares me trajeron de vuelta a España. Empezar de nuevo ya no me asusta: lo he hecho varias veces y sé que siempre hay algo valioso al otro lado. Sigo estudiando, sigo mejorando cada día y sigo adaptándome a un mundo que no para. Porque si estos años y todos estos kilómetros me han enseñado algo, es que los nuevos comienzos no son el fin de algo. Son exactamente donde empieza lo mejor.',
+        skills_label:'Con qué trabajo', skills_h:'Habilidades y Certificaciones',
+        stack_h:'Stack Técnico',
+        cat_lang:'Lenguajes y Bases de Datos', cat_analytics:'Análisis y Visualización',
+        cat_tools:'Herramientas y Otros', cat_languages:'Idiomas',
+        l_es:'Español', l_ca:'Catalán', l_en:'Inglés',
+        l_native:'Nativo', l_native2:'Nativo', l_fluent:'Fluido',
+        certs_h:'Certificaciones',
+        cert1:'Bootcamp de Análisis de Datos', cert2:'SQL para Ciencia de Datos',
+        cert3:'Excel para Análisis de Datos', cert4:'Fundamentos de Gestión de Proyectos',
+        cert5:'Fundamentos de Data Science e IA',
+        cert_toggle:'Ver detalles',
+        cert1_p1:'Programa intensivo de 300 horas centrado en el análisis de datos desde cero con una metodología práctica orientada a proyectos. Adquirí habilidades en Python, SQL, modelado y transformación de datos, análisis exploratorio (EDA) y visualización con herramientas como Power BI.',
+        cert1_p2:'Trabajé con fundamentos de Machine Learning e IA aplicada a la toma de decisiones, desarrollando un proyecto final (capstone) orientado a resolver un caso real. El enfoque learning by doing me permitió entender cómo transformar datos en información útil para el negocio.',
+        cert2_p1:'Curso introductorio centrado en el uso de SQL para el análisis de datos. Desarrollé habilidades para consultar, filtrar, transformar y combinar información en bases de datos relacionales, construyendo consultas desde nivel básico hasta intermedio con JOINs, agregaciones y subconsultas.',
+        cert2_p2:'Enfoque práctico orientado a comprender cómo extraer insights y apoyar la toma de decisiones a partir de datos reales.',
+        cert3_p1:'Curso centrado en el uso de Excel como herramienta de análisis de datos. Desarrollé habilidades para limpiar, organizar y analizar información de forma eficiente, trabajando con funciones avanzadas, tablas dinámicas y herramientas de visualización para extraer insights y facilitar la toma de decisiones.',
+        cert3_p2:'Aprendí buenas prácticas de preparación de datos y automatización de tareas básicas.',
+        cert4_p1:'Curso centrado en los fundamentos de la gestión de proyectos, donde adquirí conocimientos sobre planificación, organización y seguimiento de proyectos en entornos profesionales. Aprendí metodologías como Agile y Waterfall, gestión del tiempo, definición de objetivos y coordinación de equipos.',
+        cert4_p2:'Comprensión de herramientas y mejores prácticas para garantizar la entrega eficiente y puntual de proyectos.',
+        cert5_p1:'Curso orientado a los fundamentos de la ciencia de datos y la IA, donde adquirí una base sólida en conceptos clave como análisis de datos, estadística, machine learning y el papel de la IA en entornos reales.',
+        cert5_p2:'Enfoque práctico y aplicado que me permitió conectar estos conceptos con casos de negocio reales y entender cómo los datos se transforman en información útil para la toma de decisiones.',
+        proj_label:'Portfolio', proj_h:'Proyectos Destacados',
+        p1_title:'Análisis del Turismo en Filipinas',
+        p1_desc:'Pipeline ETL end-to-end sobre datos oficiales de turismo filipino (2015–2023). Extracción automatizada de informes PDF anuales, limpieza multi-fuente en Python y dashboard en Power BI con Azure Maps.',
+        p1_story:'"Nació durante 5 meses en Filipinas. Los datos contaban una historia que yo estaba viviendo."',
+        p2_title:'NovaShop — Pipeline de Privacidad',
+        p2_desc:'Pipeline de datos GDPR para un e-commerce ficticio. Generación de datos sintéticos con Faker, detección de PII con Ollama (llama3.2) y anonimización: hashing SHA2, enmascaramiento, inyección de ruido, validación k-anonimato.',
+        p2_story:'"Empezó como curiosidad sobre cómo anonimizar datos antes de enviarlos a la IA. Evolucionó a un proyecto completo de ingeniería de privacidad."',
+        p3_title:'JoyClinic — Predicción de Ventas',
+        p3_desc:'Modelo de predicción de ventas para una clínica médica real con XGBoost. Fusión multi-fuente: reservas, meteorología, eventos locales, festivos. Progresión: Regresión Lineal (R²=0.61) → XGBoost (R²=0.74) → XGBoost enriquecido (R²=0.79).',
+        p3_story:'"Mi primer proyecto con datos reales. Aprendí que los modelos mejoran cuando entiendes el negocio, no solo los algoritmos."',
+        gh_link:'Ver en GitHub', gh_link2:'Ver en GitHub', gh_link3:'Ver en GitHub',
+        world_label:'Más allá de la pantalla', world_h:'Mi Mundo',
+        w1_label:'Filipinas · 2025', w1_text:'"Los datos tienen más historias cuando los has vivido."',
+        w2_label:'Chicago · México · Colombia', w2_text:'"Cada ciudad me enseñó a adaptarme. Cada dataset hace lo mismo."',
+        w3_label:'Siempre en movimiento', w3_text:'"De las ciencias del deporte al análisis de datos — las métricas nunca mienten."',
+        contact_label:'Hablemos', contact_h:'Contacto',
+        contact_intro:'Si crees que podemos encajar — escríbeme.',
+      }
+    };
+
+    let lang = 'en';
+
+    function applyLang(l) {
+      lang = l;
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (T[l][k] !== undefined) el.innerHTML = T[l][k];
+      });
+      document.getElementById('langBtn').textContent = l === 'en' ? 'ES' : 'EN';
+    }
+
+    function toggleLang() { applyLang(lang === 'en' ? 'es' : 'en'); }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+
+    document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+    /* ===== PROGRESS BAR ===== */
+    const prog = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total    = document.body.scrollHeight - window.innerHeight;
+      prog.style.width = (scrolled / total * 100) + '%';
+      document.getElementById('navbar').classList.toggle('scrolled', scrolled > 60);
+    });
+
+    /* ===== MOBILE MENU ===== */
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+    /* ===== CERTIFICATIONS TOGGLE ===== */
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.cert-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const detailsId  = btn.getAttribute('aria-controls');
+          const detailsDiv = document.getElementById(detailsId);
+          const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+          btn.setAttribute('aria-expanded', !isExpanded);
+
+          if (!isExpanded) {
+            detailsDiv.style.display = 'block';
+            detailsDiv.offsetHeight;
+            detailsDiv.classList.add('open');
+          } else {
+            detailsDiv.classList.remove('open');
+            setTimeout(function () { detailsDiv.style.display = 'none'; }, 400);
+          }
+        });
+      });
+    });
+
+    /* ===== ABOUT TOGGLE ===== */
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn   = document.querySelector('.about-toggle');
+      const fullStory   = document.querySelector('.about-full-story');
+
+      if (toggleBtn && fullStory) {
+        toggleBtn.addEventListener('click', function () {
+          const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+          toggleBtn.setAttribute('aria-expanded', !isExpanded);
+
+          if (!isExpanded) {
+            fullStory.style.display = 'block';
+            fullStory.offsetHeight; // force reflow for transition
+            fullStory.classList.add('open');
+          } else {
+            fullStory.classList.remove('open');
+            setTimeout(() => { fullStory.style.display = 'none'; }, 400);
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
